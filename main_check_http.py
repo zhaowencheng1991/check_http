@@ -26,7 +26,7 @@ def allert_sms(message):
     service = 'SUDA_NGINX'
     subject = 'suda前端机nginx服务异常'
     sms = 'http://monitor.pso.sina.com.cn/monitor/index.php/interface/sendSMS'
-    receiver = 'wencheng'
+    receiver = '111'
 
     curl_cmd = ("curl -d receivers=%s -d service=%s -d level=%s -d subject='%s' %s") % (
     receiver, service, level, message, sms)
@@ -38,7 +38,7 @@ def allert_mail(message):
     service = 'SUDA_NGINX'
     subject = 'suda前端机nginx服务异常'
     mail = 'http://monitor.pso.sina.com.cn/monitor/index.php/interface/sendMail'
-    receiver = 'wencheng'
+    receiver = '111'
     curl_cmd = ("curl -d receivers=%s -d service=%s -d level=%s -d subject=%s -d content='%s', %s") % (
     receiver, service, level, subject, message, mail)
     try_run_ing = subprocess.Popen(curl_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
