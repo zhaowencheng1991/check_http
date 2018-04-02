@@ -56,4 +56,4 @@ if __name__ == '__main__':
         allert_mail(message)
         print  (" %s : %s " % ("check ngin error", alert_list))
     else:
-        print "che_suda_ok"
+        print "che_suda_ok "
