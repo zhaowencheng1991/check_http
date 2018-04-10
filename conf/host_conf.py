@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # coding: utf-8
 # author  :zhaowencheng
+#user_l = 'wencheng,data_qa,'
+user_l = 'wencheng,'
 host_l = [
 "172.16.234.95",
 "172.16.234.97",

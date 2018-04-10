@@ -9,8 +9,8 @@ import subprocess
 from conf import host_conf
 
 host = host_conf.host_l
-socket.setdefaulttimeout(6)
-
+socket.setdefaulttimeout(3)
+emial_list = host_conf.user_l
 def check_http(host,method,url):
     try:
         conn = httplib.HTTPConnection(host)
@@ -23,13 +23,24 @@ def check_http(host,method,url):
     except:
         return True
 
+def get_duty_user(host,method,url):
+    try:
+        conn = httplib.HTTPConnection(host)
+        conn.request(method,url)
+        result = conn.getresponse()
+        duty_user = result.read()
+    except:
+        duty_user = "wencheng"
+    return duty_user
+
+
 def allert_sms(message):
     message = str(message)
     level = 'warning'
     service = 'SUDA_NGINX'
     subject = 'suda前端机nginx服务异常'
     sms = 'http://monitor.pso.sina.com.cn/monitor/index.php/interface/sendSMS'
-    receiver = 'wencheng'
+    receiver = emial_list
 
     curl_cmd = ("curl -d receivers=%s -d service=%s -d level=%s -d subject='%s' %s") % (
     receiver, service, level, message, sms)
@@ -41,12 +52,15 @@ def allert_mail(message):
     service = 'SUDA_NGINX'
     subject = 'suda前端机nginx服务异常'
     mail = 'http://monitor.pso.sina.com.cn/monitor/index.php/interface/sendMail'
-    receiver = 'wencheng'
+    receiver = emial_list
     curl_cmd = ("curl -d receivers=%s -d service=%s -d level=%s -d subject=%s -d content='%s', %s") % (
     receiver, service, level, subject, message, mail)
     try_run_ing = subprocess.Popen(curl_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 if __name__ == '__main__':
+    duty_user = get_duty_user("monitor.pso.sina.com.cn", "GET", "/monitor/index.php/interface/internal/getDutyUser")
+    emial_list = emial_list+duty_user
+    print duty_user
     alert_list = []
     for host_ip in host:
         check_result = check_http(host_ip, "GET", "/a.gif")
