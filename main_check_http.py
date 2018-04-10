@@ -9,16 +9,19 @@ import subprocess
 from conf import host_conf
 
 host = host_conf.host_l
-socket.setdefaulttimeout(30)
+socket.setdefaulttimeout(6)
 
 def check_http(host,method,url):
-    conn = httplib.HTTPConnection(host)
-    conn.request(method,url)
-    result = conn.getresponse()
-    status = result.status
-    if status == 200:
-        return False
-    return True
+    try:
+        conn = httplib.HTTPConnection(host)
+        conn.request(method,url)
+        result = conn.getresponse()
+        status = result.status
+        if status == 200:
+            return False
+        return True
+    except:
+        return True
 
 def allert_sms(message):
     message = str(message)
@@ -46,7 +49,7 @@ def allert_mail(message):
 if __name__ == '__main__':
     alert_list = []
     for host_ip in host:
-        check_result = check_http(host_ip, "GET", "/ga.gif")
+        check_result = check_http(host_ip, "GET", "/a.gif")
         if check_result:
             alert_list.append(host_ip)
 
@@ -56,4 +59,4 @@ if __name__ == '__main__':
         allert_mail(message)
         print  (" %s : %s " % ("check ngin error", alert_list))
     else:
-        print "che_suda_ok "
+        print "check_suda_ok "
